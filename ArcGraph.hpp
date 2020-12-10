@@ -18,15 +18,17 @@
 
 class ArcGraph: public IGraph{
 private:
-    int_fast32_t size = 0;
-    vector<pair<int_fast32_t, int_fast32_t>> links;
+    int_fast32_t vertices_count = 0;
+    std::vector<std::pair<int_fast32_t, int_fast32_t>> links;
 public:
+    ArcGraph(IGraph*& another_graph);
+    ArcGraph(int_fast32_t vt_count);
     void AddEdge(int_fast32_t from, int_fast32_t to) override;
     
-    int_fast32_t VerticesCount() override;
+    int_fast32_t VerticesCount() const override;
     
-    void GetNextVertices(int_fast32_t vertex, vector<int_fast32_t>& vertices) override;
-    void GetPrevVertices(int_fast32_t vertex, vector<int_fast32_t>& vertices) override;
+    void GetNextVertices(int_fast32_t vertex, std::vector<int_fast32_t>& vertices) const override;
+    void GetPrevVertices(int_fast32_t vertex, std::vector<int_fast32_t>& vertices) const override;
 };
 
 #endif /* ArcGraph_hpp */

@@ -8,68 +8,51 @@
 
 #include "MatrixGraph.hpp"
 
-bool MatrixGraph::Check(int_fast32_t vertex){
-    if (matrix.size() == 0){
-        return false;
-    }
-    else {
-        for (int i = 0; i < matrix.size(); ++i){
-            if (matrix.at(i).first == vertex){
-                return true;
-            }
+MatrixGraph::MatrixGraph(IGraph*& another_graph){
+    vertices_count = another_graph->VerticesCount();
+    matrix.resize(vertices_count);
+    for (int_fast32_t j = 0; j < another_graph->VerticesCount(); ++j){
+        std::vector<int_fast32_t> nv;
+        std::vector<int_fast32_t> pv;
+        another_graph->GetNextVertices(j, nv);
+        another_graph->GetPrevVertices(j, pv);
+        for (int_fast32_t i = 0; i < pv.size(); ++i){
+            matrix[pv[i]][j] = true;
+        }
+        for (int_fast32_t i = 0; i < nv.size(); ++i){
+            matrix[j][nv[i]] = true;
         }
     }
-    return false;
+}
+
+MatrixGraph::MatrixGraph(int_fast32_t vt_count){
+    vertices_count = vt_count;
+    matrix.resize(vertices_count);
+    for (int_fast32_t j = 0; j < vt_count; ++j){
+        matrix[j].resize(vt_count);
+    }
 }
 
 void MatrixGraph::AddEdge(int_fast32_t from, int_fast32_t to){
-    if (!Check(from)){
-        vector<bool> v_empty_connections(matrix.size() + 1, false);
-        pair<int_fast32_t, vector<bool>> vtx;
-        vtx.first = from;
-        vtx.second = v_empty_connections;
-        matrix.push_back(vtx);
-        for(int_fast32_t i = 0; i < matrix.size(); ++i){
-            matrix.at(i).second.push_back(false);
-        }
-        ++size;
-    }
-    if (!Check(to)){
-        vector<bool> v_empty_connections(matrix.size() + 1, false);
-        pair<int_fast32_t, vector<bool>> vtx;
-        vtx.first = to;
-        vtx.second = v_empty_connections;
-        matrix.push_back(vtx);
-        for(int_fast32_t i = 0; i < matrix.size(); ++i){
-            matrix.at(i).second.push_back(false);
-        }
-        ++size;
-    }
-    matrix.at(from).second.at(to) = true;
+    matrix.at(from).at(to) = true;
 }
 
-int_fast32_t MatrixGraph::VerticesCount(){
-    return size;
+int_fast32_t MatrixGraph::VerticesCount() const {
+    return vertices_count;
 }
 
-void MatrixGraph::GetNextVertices(int_fast32_t vertex, vector<int_fast32_t>& vertices){
-    int_fast32_t i = 0;
-    for (; i < size; ++i){
-        if (matrix.at(i).first == vertex){
-            break;
-        }
-    }
-    for (int_fast32_t j = 0; j < size; ++j){
-        if (matrix.at(i).second.at(j)){
-            vertices.push_back(matrix.at(j).first);
+void MatrixGraph::GetNextVertices(int_fast32_t vertex, std::vector<int_fast32_t>& vertices) const {
+    for (int_fast32_t j = 0; j < vertices_count; ++j){
+        if (matrix.at(vertex).at(j)){
+            vertices.push_back(j);
         }
     }
 }
 
-void MatrixGraph::GetPrevVertices(int_fast32_t vertex, vector<int_fast32_t>& vertices){
-    for (int_fast32_t i = 0; i < size; ++i){
-        if (matrix.at(i).second.at(vertex)){
-            vertices.push_back(i);
+void MatrixGraph::GetPrevVertices(int_fast32_t vertex, std::vector<int_fast32_t>& vertices) const {
+    for (int_fast32_t j = 0; j < vertices_count; ++j){
+        if (matrix.at(j).at(vertex)){
+            vertices.push_back(j);
         }
     }
 }
