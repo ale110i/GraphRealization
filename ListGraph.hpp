@@ -18,15 +18,17 @@
 
 class ListGraph: public IGraph{
 private:
-    bool Check(int_fast32_t vertex);
-    vector<pair<int_fast32_t, pair<deque<int_fast32_t>, deque<int_fast32_t>>>> links;
+    std::vector<std::pair<std::deque<int_fast32_t>, std::deque<int_fast32_t>>> links;
+    int_fast32_t vertices_count = 0;
 public:
+    ListGraph(IGraph*& another_graph);
+    ListGraph(int_fast32_t vt_count);
     void AddEdge(int_fast32_t from, int_fast32_t to) override;
     
-    int_fast32_t VerticesCount() override;
+    int_fast32_t VerticesCount() const override;
     
-    void GetNextVertices(int_fast32_t vertex, vector<int_fast32_t>& vertices) override;
-    void GetPrevVertices(int_fast32_t vertex, vector<int_fast32_t>& vertices) override;
+    void GetNextVertices(int_fast32_t vertex, std::vector<int_fast32_t>& vertices) const override;
+    void GetPrevVertices(int_fast32_t vertex, std::vector<int_fast32_t>& vertices) const override;
 };
 
 #endif /* ListGraph_hpp */

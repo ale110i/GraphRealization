@@ -11,12 +11,14 @@
 #include <vector>
 #include <deque>
 #include <string>
+#include <unordered_set>
 #include "IGraph.hpp"
 #include "ListGraph.hpp"
 #include "MatrixGraph.hpp"
 #include "SetGraph.hpp"
 #include "ArcGraph.hpp"
 #include "HashTableFP.hpp"
+
 
 using namespace std;
 
@@ -57,10 +59,6 @@ void dfs_plus_fc(IGraph*& graph,
         vector<int_fast32_t> nv;
         graph->GetNextVertices(curr_vtx, nv);
         if (!nv.empty()){
-            for (int i = 0; i < nv.size(); ++i){
-                printf("%i%s", nv[i], " ");
-            }
-            printf("%s", "\n");
             lv.push_front(curr_vtx);
             for (int_fast32_t i = 0; i < nv.size(); ++i){
                 if (lv.size() >= 2){
@@ -108,16 +106,16 @@ int full_find_min(IGraph*& graph, vector<vtx_color>& vt_c){
 
 int main(){
     
-    [[maybe_unused]] IGraph* l = new ListGraph();
-    [[maybe_unused]] IGraph* m = new MatrixGraph();
-    [[maybe_unused]] IGraph* s = new SetGraph();
-    [[maybe_unused]] IGraph* a = new ArcGraph();
-    
     int_fast32_t edges_count;
     int_fast32_t vertex_count;
     
     scanf("%i", &vertex_count);
     scanf("%i", &edges_count);
+    
+    [[maybe_unused]] IGraph* l = new ListGraph(vertex_count);
+    [[maybe_unused]] IGraph* m = new MatrixGraph(vertex_count);
+    [[maybe_unused]] IGraph* s = new SetGraph(vertex_count);
+    [[maybe_unused]] IGraph* a = new ArcGraph(vertex_count);
     
     int_fast32_t from;
     int_fast32_t to;
@@ -137,22 +135,20 @@ int main(){
         a->AddEdge(to, from);
     }
     
-    vector<vtx_color> l_cs(vertex_count, white);
-    vector<vtx_color> m_cs(vertex_count, white);
-    vector<vtx_color> s_cs(vertex_count, white);
-    vector<vtx_color> a_cs(vertex_count, white);
+    [[maybe_unused]] vector<vtx_color> l_cs(l->VerticesCount(), white);
+    [[maybe_unused]] vector<vtx_color> m_cs(m->VerticesCount(), white);
+    [[maybe_unused]] vector<vtx_color> s_cs(s->VerticesCount(), white);
+    [[maybe_unused]] vector<vtx_color> a_cs(a->VerticesCount(), white);
     
-    int_fast32_t l_mc = full_find_min(l, l_cs);
-    int_fast32_t m_mc = full_find_min(m, m_cs);
-    int_fast32_t s_mc = full_find_min(s, s_cs);
-    int_fast32_t a_mc = full_find_min(a, a_cs);
+    [[maybe_unused]] int_fast32_t l_mc = full_find_min(l, l_cs);
+    [[maybe_unused]] int_fast32_t m_mc = full_find_min(m, m_cs);
+    [[maybe_unused]] int_fast32_t s_mc = full_find_min(s, s_cs);
+    [[maybe_unused]] int_fast32_t a_mc = full_find_min(a, a_cs);
     
-    printf("%s", "Hello-hello, motherfucking world!\n");
-    
-    printf("%i%s", l_mc, "\n");
-    printf("%i%s", m_mc, "\n");
+    //printf("%i%s", l_mc, "\n");
+    //printf("%i%s", m_mc, "\n");
     printf("%i%s", s_mc, "\n");
-    printf("%i%s", a_mc, "\n");
+    //printf("%i%s", a_mc, "\n");
     
     return 0;
 }
